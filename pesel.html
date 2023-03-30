@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Pesel</title>
+</head>
+<body>
+    <input type='textbox' id='input'>podaj PESEL<br>
+    <input type='button' id='btn' value='go'><br>
+    <p id='rok'>Rok: </p>
+    <p id='miesiac'>Miesiąc: </p>
+    <p id='dzien'>Dzień: </p>
+    <p id='plec'>Płeć: </p>
+</body>
+</html>
+<script>
+var wagi = '1379137913'
+var wieki = {0: 19, 2: 20, 4: 21, 6: 22, 8: 18}
+var miesiaceNazwy = ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień']
+var rok = document.getElementById('rok')
+var miesiac = document.getElementById('miesiac')
+var dzien = document.getElementById('dzien')
+var plec = document.getElementById('plec')
+
+document.getElementById('btn').onclick = () => {
+    var pesel = document.getElementById('input').value
+    var suma = 0
+    
+    for(let c = 0; c < 10; c++) {
+        suma += parseInt(pesel[c]) * parseInt(wagi[c])
+    }
+
+    var liczbaKontrolna = 10 - suma % 10
+    
+    if(pesel.length != 11) {
+        alert('zła długość!')
+    } else if(pesel[10] != liczbaKontrolna) {
+        alert('zła liczba kontrolna!')
+    } else {
+        for(let c = 0; c < 9; c += 2) {
+            if(parseInt(pesel[2]) == c || parseInt(pesel[2]) == c + 1) {
+                rok.innerText = 'Rok: ' + wieki[c] + pesel.slice(0, 2)
+                miesiac.innerText = 'Miesiąc: ' + miesiaceNazwy[parseInt(pesel.slice(2, 4)) - c * 10 - 1]
+                break
+            }
+        }
+        dzien.innerText = 'Dzień: ' + parseInt(pesel.slice(4, 6))
+        if(pesel[9] % 2 == 0) {
+            plec.innerText = 'Płeć: kobieta'
+        } else {
+            plec.innerText = 'Płeć: mężczyzna'
+        }
+    }
+}
+</script>
